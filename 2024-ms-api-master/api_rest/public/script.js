@@ -1,46 +1,34 @@
 function guardar() {
-    let nombre_ = document.getElementById('nombre').value;
-    let apellido_ = document.getElementById('apellido').value;
 
-    let data = { nombre: nombre_, apellido: apellido_ };
+    let nombre_ = document.getElementById('nombre').value
+    let apellido_ = document.getElementById('apellido').value
+
+    let data = { nombre:nombre_, apellido:apellido_ }
 
     return new Promise((resolve, reject) => {
         const request_options = {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'application/json' // Indicar que se envían datos JSON
             },
-            body: JSON.stringify(data)
+            body: JSON.stringify(data) // Convertir los datos a JSON
         };
 
         fetch('http://localhost:3000/usuario', request_options)
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error('Error en la red');
-                }
-                return response.json();
-            })
-            .then((data) => {
-                listar(); // Actualiza la lista de usuarios después de guardar
-                resolve(data);
-            })
+            .then((data) => resolve(data.json()))
             .catch((error) => reject(`[error]: ${error}`));
-    });
+    })
 }
 
 function guardar_usuario() {
     guardar()
-        .then(() => {
-            alert('Registro exitoso.');
-            document.getElementById('nombre').value = ''; // Limpiar campos
-            document.getElementById('apellido').value = '';
-        })
-        .catch((error) => {
-            alert('Error al ingresar.');
-            console.error(error);
-        });
+        .then( (response) => {
+            alert('Registro exitoso.')
+        } )
+        .catch( (error) => {
+            alert('Error al ingresar.')
+        } )
 }
-
 function listar() {
     fetch('http://localhost:3000/usuario')
         .then((response) => {

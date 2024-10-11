@@ -17,11 +17,10 @@ async function obtener_usuario(dato) {
 }
 
 async function actualizar_usuario( dato ) {
-    const objeto = await model.findOne( {_id: dato.id} )
+    const objeto = await model.findOne( {apellido: dato.apellido} )
 
     if ( objeto ) {
-        objeto.nombre = dato.nombre
-    
+        objeto.nombre = dato.nombre    
         return resultado = await objeto.save()    
     } else {
         return null
@@ -30,18 +29,6 @@ async function actualizar_usuario( dato ) {
 
 async function eliminar_usuario( dato ) {
     return await model.deleteOne({apellido: dato.apellido})
-}
-
-async function deleteUser(dato) {
-    let filter = {}
-
-    if (dato.apellido) {
-       filter = { apellido: dato.apellido }
-    }
-
-    console.log("ENTRA DELETE0");
-    const resultado = await db.collection('Usuario').deleteOne(filter);
-    return resultado;
 }
 
 module.exports = {

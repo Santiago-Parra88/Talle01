@@ -20,7 +20,7 @@ function obtener_usuario( dato ) {
     } )
 }
 
-function actualizar_usuario( dato ) {
+/*function actualizar_usuario( dato ) {
     return new Promise((resolve, reject) => {
         let resultado = storage.actualizar( dato )
         if (resultado) {
@@ -29,6 +29,20 @@ function actualizar_usuario( dato ) {
             return reject('No existe usuario actualizar.')
         }
     })
+}*/
+
+async function actualizar_usuario(apellido, datosActualizacion) {
+    const objeto = await model.findOne({ apellido });
+
+    if (objeto) {
+        // Actualiza los campos según los datos proporcionados
+        objeto.nombre = datosActualizacion.nombre || objeto.nombre;
+        objeto.apellido = datosActualizacion.apellido || objeto.apellido;
+
+        return await objeto.save();
+    } else {
+        throw new Error('Usuario no encontrado');
+    }
 }
 
 function eliminar_usuario( dato ) {
@@ -38,26 +52,9 @@ function eliminar_usuario( dato ) {
     })
 }
 
-function deleted( dato ) {
-
-    resolve("DELETED" )
-    /*
-    
-    console.log("ENTRA DELETE CONTROLLER");
-    return new Promise( (resolve, reject) => {
-        if (!dato) {
-            reject( 'No existen datos' )
-        } else {
-            resolve( storage.delete( dato ) )
-        }
-    } )
-
-    */
-}
-
 module.exports = {
     insertar_usuario,
     obtener_usuario,
     actualizar_usuario,
-    eliminar_usuario,
+    eliminar_usuario
 }
