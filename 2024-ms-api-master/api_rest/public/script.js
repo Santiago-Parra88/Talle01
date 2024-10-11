@@ -20,6 +20,29 @@ function guardar() {
     })
 }
 
+function eliminar_usuario(apellido) {
+    return new Promise((resolve, reject) => {
+        const request_options = {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ apellido }) 
+        };
+
+        fetch('http://localhost:3000/usuario', request_options)
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error('Error al eliminar el usuario');
+                }
+                alert('Registro Eliminado exitoso.')
+                return response.json();                
+            })
+            .then(data => resolve(data))
+            .catch(error => reject(`[error]: ${error}`));
+    });
+}
+
 function guardar_usuario() {
     guardar()
         .then( (response) => {
@@ -29,6 +52,29 @@ function guardar_usuario() {
             alert('Error al ingresar.')
         } )
 }
+
+function actualizar_usuario(data) {
+    return new Promise((resolve, reject) => {
+        const request_options = {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        };
+
+        fetch('http://localhost:3000/usuario', request_options)
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error('Error al actualizar el usuario');
+                }
+                return response.json();
+            })
+            .then(data => resolve(data))
+            .catch(error => reject(`[error]: ${error}`));
+    });
+}
+
 function listar() {
     fetch('http://localhost:3000/usuario')
         .then((response) => {
@@ -37,16 +83,16 @@ function listar() {
             }
             return response.json();
         })
-        .then((data) => { // Cambié `usuarios` a `data`
-            const usuarios = data.body; // Accedemos al array de usuarios en `body`
+        .then((data) => { 
+            const usuarios = data.body;
             const tabla = document.getElementById('tabla-usuarios').getElementsByTagName('tbody')[0];
-            tabla.innerHTML = ''; // Limpiar tabla antes de rellenar
+            tabla.innerHTML = ''; 
 
-            // Verificamos que `usuarios` sea un array
+            // Validamos los usuarios
             if (Array.isArray(usuarios)) {
                 usuarios.forEach((usuario) => {
                     const fila = document.createElement('tr');
-                    fila.innerHTML = `<td>${usuario.nombre}</td><td>${usuario.apellido}</td><td>${usuario._id}</td>`;
+                    fila.innerHTML = `<td>${usuario.nombre}</td><td>${usuario.apellido}</td><td><button onclick="eliminar_usuario('${usuario.apellido}')">Eliminar</button></td><td><button onclick="mostrarFormularioActualizar('${usuario.apellido}', '${usuario.nombre}')">Actualizar</button></td>`;
                     tabla.appendChild(fila);
                 });
             } else {
