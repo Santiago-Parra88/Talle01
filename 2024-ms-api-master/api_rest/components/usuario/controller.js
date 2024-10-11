@@ -20,29 +20,15 @@ function obtener_usuario( dato ) {
     } )
 }
 
-/*function actualizar_usuario( dato ) {
+function actualizar_usuario( dato ) {
     return new Promise((resolve, reject) => {
         let resultado = storage.actualizar( dato )
         if (resultado) {
             return resolve( dato )
         } else {
-            return reject('No existe usuario actualizar.')
+            reject('No existe usuario actualizar.')
         }
     })
-}*/
-
-async function actualizar_usuario(apellido, datosActualizacion) {
-    const objeto = await model.findOne({ apellido });
-
-    if (objeto) {
-        // Actualiza los campos según los datos proporcionados
-        objeto.nombre = datosActualizacion.nombre || objeto.nombre;
-        objeto.apellido = datosActualizacion.apellido || objeto.apellido;
-
-        return await objeto.save();
-    } else {
-        throw new Error('Usuario no encontrado');
-    }
 }
 
 function eliminar_usuario( dato ) {
